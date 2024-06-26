@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 const createMyRestaurant = async (req: Request, res: Response) => {
   try {
-    const existingRestaurant = await Restaurant.find({ user: req.userId });
+    const existingRestaurant = await Restaurant.findOne({ user: req.userId });
 
     if (existingRestaurant) {
       return res
@@ -15,7 +15,7 @@ const createMyRestaurant = async (req: Request, res: Response) => {
 
     const image = req.file as Express.Multer.File;
     const base64Image = Buffer.from(image.buffer).toString("base64"); //converted the image to base64
-    const dataURI = `data: ${image.mimetype};base64,${base64Image}`; //mimetype means whether the image is png or jpg
+    const dataURI = `data:${image.mimetype};base64,${base64Image}`; //mimetype means whether the image is png or jpg
 
     const uploadResponse = await cloudinary.v2.uploader.upload(dataURI);
 
